@@ -42,3 +42,41 @@ export default class  ProductList {
       return limitedList;
     }
 }
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("DOM fully loaded.");
+
+  // Select location button and display
+  const locationButton = document.getElementById("getLocation");
+  const locationDisplay = document.getElementById("location");
+
+  console.log("Checking if #getLocation button exists...", locationButton);
+  console.log("Checking if #location display exists...", locationDisplay);
+
+  if (locationButton) {
+      locationButton.addEventListener("click", function () {
+          console.log("Location button clicked!");
+
+          if (navigator.geolocation) {
+              console.log("Geolocation is supported.");
+
+              navigator.geolocation.getCurrentPosition(
+                  function (position) {
+                      console.log("Geolocation success!", position);
+                      const latitude = position.coords.latitude;
+                      const longitude = position.coords.longitude;
+                      locationDisplay.innerHTML = `Latitude: ${latitude}, Longitude: ${longitude}`;
+                  },
+                  function (error) {
+                      console.error("Geolocation error:", error);
+                      locationDisplay.innerHTML = `Error: ${error.message}`;
+                  }
+              );
+          } else {
+              console.error("Geolocation is not supported by this browser.");
+              locationDisplay.innerHTML = "Geolocation is not supported by this browser.";
+          }
+      });
+  } else {
+      console.error("Element #getLocation not found!");
+  }
+});
