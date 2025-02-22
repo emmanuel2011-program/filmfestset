@@ -26,13 +26,25 @@ export default class ProductData {
     try {
       const response = await fetch(`${baseURL}products/all`);
       const data = await convertToJson(response);
-      const uniqueCategories = [...new Set(data.Result.map(product => product.category))];
-      return uniqueCategories;
+  
+      // Ensure each product has 8+ attributes
+      return data.Result.map(product => ({
+        id: product.id,
+        name: product.name,
+        category: product.category,
+        price: product.price,
+        stock: product.stock,
+        brand: product.brand,
+        rating: product.rating,
+        created_at: product.created_at,
+        images: product.images || [] // Ensure it's always an array
+      }));
     } catch (error) {
       console.error("Error fetching all products:", error);
       return [];
     }
   }
+  
 
   async getData(category) {
     try {
